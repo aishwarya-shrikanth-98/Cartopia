@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import axios from 'axios';
@@ -26,30 +26,36 @@ function CustomDrawerContent(props) {
   };
 
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItem
-        label="Home"
-        onPress={() => props.navigation.navigate('Home')}
-      />
-      <DrawerItem
-        label="Edit Profile"
-        onPress={() => props.navigation.navigate('Edit Profile')}
-      />
-      <DrawerItem
-        label="About Us"
-        onPress={() => props.navigation.navigate('About Us')}
-      />
-      <DrawerItem
-        label="Terms & Conditions"
-        onPress={() => props.navigation.navigate('Terms & Conditions')}
-      />
-      <DrawerItem
-        label="Delete Account"
-        onPress={handleDeleteAccount}
-      />
-      <View style={styles.logoutContainer}>
+    <DrawerContentScrollView {...props} style={styles.drawerContent}>
+      <View style={styles.container}>
+        <DrawerItem
+          label="Home"
+          labelStyle={styles.drawerItemLabel}
+          onPress={() => props.navigation.navigate('Home')}
+        />
+        <DrawerItem
+          label="Edit Profile"
+          labelStyle={styles.drawerItemLabel}
+          onPress={() => props.navigation.navigate('Edit Profile')}
+        />
+        <DrawerItem
+          label="About Us"
+          labelStyle={styles.drawerItemLabel}
+          onPress={() => props.navigation.navigate('About Us')}
+        />
+        <DrawerItem
+          label="Terms & Conditions"
+          labelStyle={styles.drawerItemLabel}
+          onPress={() => props.navigation.navigate('Terms & Conditions')}
+        />
+        <DrawerItem
+          label="Delete Account"
+          labelStyle={styles.deleteItemLabel}
+          onPress={handleDeleteAccount}
+        />
         <DrawerItem
           label="Logout"
+          labelStyle={styles.drawerItemLabel}
           onPress={async () => {
             await AsyncStorage.removeItem('access_token');
             await AsyncStorage.removeItem('refresh_token');
@@ -62,11 +68,18 @@ function CustomDrawerContent(props) {
 }
 
 const styles = StyleSheet.create({
-  logoutContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    paddingBottom: 20,
+  drawerContent: {
+    backgroundColor: '#D7D0BC',
   },
+  container: {
+    flex: 1,
+  },
+  drawerItemLabel: {
+    color: 'black',
+  },
+  deleteItemLabel: {
+    color: 'red'
+  }
 });
 
 export default CustomDrawerContent;

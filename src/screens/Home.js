@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import axios from 'axios';
 import { styles } from '../styles/Home_Styles';
+import { getProducts, getProductsByCategory, getCategories } from '../services/Home_Services';
 
 const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,17 +26,16 @@ const HomeScreen = () => {
     try {
       if (selectedCategories.length === 0) {
         // Fetch all products initially
-        const response = await axios.get('https://api.escuelajs.co/api/v1/products');
-        setProducts(filterAndCleanProducts(response.data));
+        const allProducts = await getProducts();
+        setProducts(filterAndCleanProducts(allProducts));
       } else {
         // Fetch products based on selected categories
-        const categoryRequests = selectedCategories.map(categoryName => {
+        const categoryRequests = selectedCategories.map(async (categoryName) => {
           const categoryId = categories.find(c => c.name === categoryName)?.id;
-          return axios.get(`https://api.escuelajs.co/api/v1/categories/${categoryId}/products`);
+          return getProductsByCategory(categoryId);
         });
 
-        const responses = await Promise.all(categoryRequests);
-        const allProducts = responses.flatMap(response => response.data);
+        const allProducts = (await Promise.all(categoryRequests)).flat();
         setProducts(filterAndCleanProducts(allProducts));
       }
     } catch (error) {
@@ -62,9 +61,9 @@ const HomeScreen = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://api.escuelajs.co/api/v1/categories');
-      const uniqueCategories = Array.from(new Set(response.data.map(cat => cat.name)))
-        .map(name => response.data.find(cat => cat.name === name));
+      const allCategories = await getCategories();
+      const uniqueCategories = Array.from(new Set(allCategories.map(cat => cat.name)))
+        .map(name => allCategories.find(cat => cat.name === name));
       setCategories(uniqueCategories);
     } catch (error) {
       console.error(error);
@@ -99,6 +98,7 @@ const HomeScreen = () => {
           <TextInput
             style={styles.searchBar}
             placeholder="Search products..."
+            placeholderTextColor="gray"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -125,6 +125,7 @@ const HomeScreen = () => {
             <TextInput
               style={styles.priceInput}
               placeholder="Min Price"
+              placeholderTextColor="gray"
               value={minPrice}
               onChangeText={setMinPrice}
               keyboardType="numeric"
@@ -132,6 +133,7 @@ const HomeScreen = () => {
             <TextInput
               style={styles.priceInput}
               placeholder="Max Price"
+              placeholderTextColor="gray"
               value={maxPrice}
               onChangeText={setMaxPrice}
               keyboardType="numeric"
@@ -140,7 +142,7 @@ const HomeScreen = () => {
         </View>
         {loading ? (
           <View style={styles.loaderWrapper}>
-            <ActivityIndicator size="large" color="#007BFF" />
+            <ActivityIndicator size="large" color="black" />
           </View>
         ) : (
           <>

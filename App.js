@@ -20,8 +20,17 @@ const Drawer = createDrawerNavigator();
 function HomeStack() {
   return (
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerLeft: () => <View /> }} />
-      <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{
+        headerStyle: { backgroundColor: '#D7D0BC' },
+        headerTintColor: 'black',
+        headerShadowVisible: false,
+        headerLeft: () => <View />
+      }} />
+      <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} options={{
+        headerStyle: { backgroundColor: '#D7D0BC' },
+        headerTintColor: 'black',
+        headerShadowVisible: false,
+      }} />
     </Stack.Navigator>
   );
 }
@@ -29,7 +38,17 @@ function HomeStack() {
 function EditProfileStack() {
   return (
     <Stack.Navigator initialRouteName="EditProfile">
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerLeft: () => <View /> }} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} options={({ navigation }) => ({
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Text style={{ fontSize: 18, paddingLeft: 10 }}>Back</Text>
+          </TouchableOpacity>
+        ),
+        headerStyle: { backgroundColor: '#D7D0BC' },
+        headerTintColor: 'black',
+        headerShadowVisible: false,
+        headerTitle: 'Edit Profile'
+      })} />
     </Stack.Navigator>
   );
 }
@@ -46,6 +65,10 @@ function AboutUsStack() {
               <Text style={{ fontSize: 18, paddingLeft: 10 }}>Back</Text>
             </TouchableOpacity>
           ),
+          headerStyle: { backgroundColor: '#D7D0BC' },
+          headerTintColor: 'black',
+          headerShadowVisible: false,
+          headerTitle: 'About Us'
         })}
       />
     </Stack.Navigator>
@@ -64,6 +87,10 @@ function TermsAndConditionsStack() {
               <Text style={{ fontSize: 18, paddingLeft: 10 }}>Back</Text>
             </TouchableOpacity>
           ),
+          headerStyle: { backgroundColor: '#D7D0BC' },
+          headerTintColor: 'black',
+          headerShadowVisible: false,
+          headerTitle: 'Terms & Conditions',
         })}
       />
     </Stack.Navigator>
@@ -73,8 +100,20 @@ function TermsAndConditionsStack() {
 function AuthStack() {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerLeft: () => <View /> }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{
+        headerStyle: { backgroundColor: '#D7D0BC' },
+        headerTintColor: 'black',
+        headerShadowVisible: false,
+        headerTitle: '',
+        headerLeft: () => <View />
+      }} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{
+        headerStyle: { backgroundColor: '#D7D0BC' },
+        headerTintColor: 'black',
+        headerShadowVisible: false,
+        headerTitle: '',
+        headerLeft: () => <View />
+      }} />
     </Stack.Navigator>
   );
 }

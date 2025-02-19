@@ -6,7 +6,6 @@ const TermsAndConditionsScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
-        <Text style={styles.header}>Terms & Conditions</Text>
         <Text style={styles.content}>
           Welcome to Cartopia, an e-commerce platform that provides a range of products for customers to purchase. By using our platform, you agree to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern Cartopia's relationship with you in relation to this platform.
           {"\n\n"}

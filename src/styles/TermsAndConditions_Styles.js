@@ -4,18 +4,13 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#D7D0BC',
   },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
+    backgroundColor: '#D7D0BC',
   },
   content: {
     fontSize: 16,

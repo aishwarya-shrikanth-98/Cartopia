@@ -1,9 +1,8 @@
-// src/screens/SignUpScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import { styles } from '../styles/SignUp_Styles';
+import { signUp, validateName, validateEmail, validatePassword } from '../services/SignUp_Services';
 
 const SignUpScreen = () => {
   const [name, setName] = useState('');
@@ -14,7 +13,6 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
-    // Perform validation
     if (!isFormValid()) {
       Alert.alert('Error', 'Please fill in all required fields with valid information.');
       return;
@@ -23,12 +21,7 @@ const SignUpScreen = () => {
     const avatarUrl = 'https://picsum.photos/800';
 
     try {
-      const response = await axios.post('https://api.escuelajs.co/api/v1/users/', {
-        email,
-        password,
-        name,
-        avatar: avatarUrl,
-      });
+      const user = await signUp(name, email, password, avatarUrl);
       Alert.alert('Success', 'User created successfully. Please log in.');
       navigation.navigate('Login');
     } catch (error) {
@@ -42,21 +35,6 @@ const SignUpScreen = () => {
 
   const handleLogin = () => {
     navigation.navigate('Login');
-  };
-
-  const validateName = (name) => {
-    const nameRegex = /^[a-zA-Z\s]{1,30}$/;
-    return nameRegex.test(name);
-  };
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    const passwordRegex = /^[A-Za-z\d]{8,}$/;
-    return passwordRegex.test(password);
   };
 
   const handleNameChange = (value) => {
@@ -107,12 +85,14 @@ const SignUpScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        <Text style={styles.title}>SignUp to Cartopia</Text>
         <View style={styles.profileImageContainer}>
           <Image source={{ uri: 'https://picsum.photos/800' }} style={styles.profileImage} />
         </View>
         <TextInput
           style={styles.input}
           placeholder="Name*"
+          placeholderTextColor="gray"
           value={name}
           onChangeText={handleNameChange}
         />
@@ -120,6 +100,7 @@ const SignUpScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Email*"
+          placeholderTextColor="gray"
           value={email}
           onChangeText={handleEmailChange}
           keyboardType="email-address"
@@ -129,6 +110,7 @@ const SignUpScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Password*"
+          placeholderTextColor="gray"
           value={password}
           onChangeText={handlePasswordChange}
           secureTextEntry
@@ -137,6 +119,7 @@ const SignUpScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Confirm Password*"
+          placeholderTextColor="gray"
           value={confirmPassword}
           onChangeText={handleConfirmPasswordChange}
           secureTextEntry

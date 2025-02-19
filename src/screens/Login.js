@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from '../styles/Login_Styles';
+import { validateEmail, login, getUserProfile } from '../services/Login_Services';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -12,10 +12,10 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  const validateEmail = async (email) => {
+  const handleValidateEmail = async (email) => {
     try {
-      const response = await axios.post('https://api.escuelajs.co/api/v1/users/is-available', { email });
-      if (response.data.isAvailable) {
+      const isAvailable = await validateEmail(email);
+      if (isAvailable) {
         setEmailError('Email is not registered.');
       } else {
         setEmailError('');
@@ -28,11 +28,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('https://api.escuelajs.co/api/v1/auth/login', {
-        email,
-        password,
-      });
-      const { access_token, refresh_token } = response.data;
+      const { access_token, refresh_token } = await login(email, password);
 
       // Save tokens and email to secure storage
       await AsyncStorage.setItem('access_token', access_token);
@@ -40,10 +36,7 @@ const LoginScreen = () => {
       await AsyncStorage.setItem('user_email', email);
 
       // Fetch user profile with access token
-      const profileResponse = await axios.get('https://api.escuelajs.co/api/v1/auth/profile', {
-        headers: { Authorization: `Bearer ${access_token}` },
-      });
-      const userProfile = profileResponse.data;
+      const userProfile = await getUserProfile();
 
       // Navigate to Home screen with user profile
       navigation.navigate('Home', { userProfile });
@@ -70,14 +63,15 @@ const LoginScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Login to Cartopia</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor='gray'
           value={email}
           onChangeText={(value) => {
             setEmail(value);
-            validateEmail(value);
+            handleValidateEmail(value);
           }}
           keyboardType="email-address"
           autoCapitalize="none"
@@ -86,6 +80,7 @@ const LoginScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Password"
+          placeholderTextColor='gray'
           value={password}
           onChangeText={setPassword}
           secureTextEntry

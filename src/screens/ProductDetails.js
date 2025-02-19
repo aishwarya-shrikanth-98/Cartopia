@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ScrollView, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import axios from 'axios';
 import { styles } from '../styles/ProductDetails_Style';
+import { getProductDetails } from '../services/ProductDetails_Services';
 
 const ProductDetailsScreen = () => {
   const [product, setProduct] = useState(null);
@@ -13,8 +13,8 @@ const ProductDetailsScreen = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`https://api.escuelajs.co/api/v1/products/${productId}`);
-        setProduct(response.data);
+        const productData = await getProductDetails(productId);
+        setProduct(productData);
       } catch (error) {
         console.error('Failed to fetch product details.', error);
       } finally {
@@ -35,10 +35,14 @@ const ProductDetailsScreen = () => {
     }
   };
 
+  const handleAddToCart = () => {
+    Alert.alert('Success', 'Product has been added to cart.');
+  };
+
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#007BFF" />
+        <ActivityIndicator size="large" color="black" />
       </View>
     );
   }
@@ -52,14 +56,19 @@ const ProductDetailsScreen = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.productTitle}>{product.title}</Text>
-      <ScrollView horizontal style={styles.imageCarousel}>
-        {renderProductImages()}
+    <View style={styles.mainContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.productTitle}>{product.title}</Text>
+        <ScrollView horizontal style={styles.imageCarousel}>
+          {renderProductImages()}
+        </ScrollView>
+        <Text style={styles.productPrice}>${product.price}</Text>
+        <Text style={styles.productDescription}>{product.description}</Text>
       </ScrollView>
-      <Text style={styles.productPrice}>${product.price}</Text>
-      <Text style={styles.productDescription}>{product.description}</Text>
-    </ScrollView>
+      <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
+        <Text style={styles.buttonText}>Add to Cart</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

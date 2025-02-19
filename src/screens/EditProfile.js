@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import { styles } from '../styles/EditProfile_Styles';
+import { getUserProfile, updateUserProfile, getUserList } from '../services/EditProfile_Services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfileScreen = () => {
@@ -16,24 +16,19 @@ const EditProfileScreen = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const accessToken = await AsyncStorage.getItem('access_token');
         const userEmail = await AsyncStorage.getItem('user_email');
 
         // Fetch the list of users
-        const usersResponse = await axios.get('https://api.escuelajs.co/api/v1/users', {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const users = await getUserList();
 
         // Find the user with the matching email
-        const loggedInUser = usersResponse.data.find(user => user.email === userEmail);
+        const loggedInUser = users.find(user => user.email === userEmail);
 
         if (loggedInUser) {
           // Fetch the detailed profile of the logged-in user
-          const profileResponse = await axios.get(`https://api.escuelajs.co/api/v1/users/${loggedInUser.id}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-          setUserProfile(profileResponse.data);
-          setName(profileResponse.data.name);
+          const profile = await getUserProfile(loggedInUser.id);
+          setUserProfile(profile);
+          setName(profile.name);
         } else {
           console.error('User not found.');
         }
@@ -50,7 +45,7 @@ const EditProfileScreen = () => {
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#007BFF" />
+        <ActivityIndicator size="large" color="black" backgroundColor="#D7D0BC" />
       </View>
     );
   }
@@ -66,13 +61,7 @@ const EditProfileScreen = () => {
   const handleUpdate = async () => {
     setUpdating(true);
     try {
-      const accessToken = await AsyncStorage.getItem('access_token');
-      const response = await axios.put(`https://api.escuelajs.co/api/v1/users/${userProfile.id}`, {
-        name,
-        password,
-      }, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      await updateUserProfile(userProfile.id, name, password);
       Alert.alert('Success', 'User information updated successfully.');
       navigation.goBack();
     } catch (error) {
@@ -89,12 +78,14 @@ const EditProfileScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Name"
+        placeholderTextColor="gray"
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="gray"
         value={password}
         onChangeText={setPassword}
         secureTextEntry

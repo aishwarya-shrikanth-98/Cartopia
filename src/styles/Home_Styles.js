@@ -3,7 +3,9 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: '#D7D0BC'
   },
   header: {
     flexDirection: 'row',
@@ -13,16 +15,17 @@ export const styles = StyleSheet.create({
   hamburgerMenu: {
     fontSize: 30,
     paddingRight: 10,
+    color: 'black'
   },
   searchBar: {
     flex: 1,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderRadius: 8,
   },
   fixedHeader: {
-    marginBottom: 16,
+    marginBottom: 8,
   },
   filterContainer: {
     flexDirection: 'row',
@@ -36,7 +39,7 @@ export const styles = StyleSheet.create({
     width: '48%',
     padding: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderRadius: 8,
   },
   categoryButton: {
@@ -46,7 +49,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderRadius: 8,
   },
   selectedCategoryButton: {
@@ -58,10 +61,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    backgroundColor: '#007BFF',
+    backgroundColor: 'black',
+    color: 'white'
   },
   filter: {
-    color: '#000',
+    color: 'black',
     textAlign: 'center',
     textAlignVertical: 'center',
     paddingHorizontal: 10,
@@ -76,7 +80,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderRadius: 8,
     marginBottom: 16,
     alignItems: 'center',
@@ -85,6 +89,8 @@ export const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 16,
+    borderColor: 'black',
+    borderWidth: 1
   },
   imageUnavailableText: {
     width: 50,

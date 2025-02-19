@@ -6,23 +6,25 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#D7D0BC'
   },
   title: {
     fontSize: 24,
     marginBottom: 24,
+    fontWeight: 'bold'
   },
   input: {
     width: '100%',
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderRadius: 8,
   },
   button: {
     width: '100%',
     padding: 12,
-    backgroundColor: '#007BFF',
+    backgroundColor: 'black',
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 12,
@@ -30,13 +32,12 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-  },
-  forgotPassword: {
-    color: '#007BFF',
-    marginBottom: 24,
+    fontWeight: 'bold'
   },
   signUp: {
-    color: '#007BFF',
+    color: 'black',
+    fontStyle: 'italic',
+    textDecorationLine: 'underline'
   },
   errorText: {
     color: 'red',

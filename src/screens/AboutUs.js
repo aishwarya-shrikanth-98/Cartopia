@@ -1,12 +1,12 @@
 import React from 'react';
-import { ScrollView, View, Text, Image } from 'react-native';
+import { ScrollView, Text, Image } from 'react-native';
 import { styles } from '../styles/AboutUs_Styles';
 
 const AboutUsScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../assets/cartopia-app-icon.png')} style={styles.icon} />
+      <Image source={require('../assets/cartopia-app-icon.png')} style={styles.icon} testID="app-icon" />
       <Text style={styles.appName}>Cartopia</Text>
       <Text style={styles.description}>
         Welcome to Cartopia, the ultimate e-commerce platform designed to make your shopping experience seamless and enjoyable. With a wide range of products spanning across various categories, we aim to provide our customers with the best quality items at competitive prices. Whether you're looking for the latest gadgets, fashionable apparel, or household essentials, Cartopia has it all.
